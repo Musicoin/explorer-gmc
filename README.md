@@ -1,4 +1,4 @@
-# GEN Explorer 
+# GENOM Explorer 
 
 
 ## Local installation
@@ -39,7 +39,7 @@ Basic settings:
     "patch":        true,
     "patchBlocks":  100,
     "settings": {
-        "symbol": "GEN",
+        "symbol": "GENOM",
         "name": "Genom",
         "title": "Genom Block Explorer",
         "author": "Gy9vin"
