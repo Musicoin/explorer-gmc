@@ -11,6 +11,10 @@
         "symbol": "GENOM",
         "name": "Genom",
         "title": "Genom Block Explorer",
-        "author": "Gy9vin"
+        "author": "Gy9vin",
+        "rss": "https://genom.tech",
+        "github": "https://github.com/genom-project",
+        "twitter": "https://twitter.com/genom_tech",
+        "copyright": "2018 © Genom"
     }
 }
