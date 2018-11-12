@@ -3,6 +3,7 @@ var mongoose = require( 'mongoose' );
 var Block     = mongoose.model( 'Block' );
 var Transaction = mongoose.model( 'Transaction' );
 var filters = require('./filters');
+var Account = mongoose.model('Account');
 
 var _ = require('lodash');
 var async = require('async');
@@ -44,6 +45,10 @@ module.exports = function(app){
   app.post('/tx', getTx);
   app.post('/block', getBlock);
   app.post('/data', getData);
+
+  app.get('/api/v1/transaction/:txid', getTransaction);
+  app.get('/api/v1/block/:number', getBlockByNumber);
+  app.get('/api/v1/address/:address', getAddress);
 
   app.post('/daorelay', DAO);
   app.post('/tokenrelay', Token);  
@@ -315,6 +320,57 @@ var getTx = function(req, res){
         res.write(JSON.stringify(doc))
         res.end();
       });
+    }
+  });
+};
+
+var getTransaction = function(req, res) {
+  var txId = req.params.txid;
+  var txFind = Transaction.findOne({ 'hash': txId }).lean(true);
+
+  txFind.exec(function (err, tx) {
+    if (!tx) {
+      console.error("can't find tx with id: " + txId)
+      res.status(404).send();
+    } else {
+      var blockFind = Block.findOne({}, 'number').lean(true).sort('-number')
+      blockFind.exec(function (err, block) {
+        tx.confirmations = block.number - tx.blockNumber
+        delete tx._id
+        res.write(JSON.stringify(tx))
+        res.end();
+      });
+    }
+  });
+};
+
+var getBlockByNumber = function(req, res) {
+  var number = parseInt(req.params.number);
+  var blockFind = Block.findOne({ 'number' : number }).lean(true);
+
+  blockFind.exec(function (err, block) {
+    if (err || !block) {
+      console.error("can't find block with number: " + number)
+      res.status(404).send();
+    } else {
+      delete block._id
+      res.write(JSON.stringify(block));
+      res.end();
+    }
+  });
+};
+
+var getAddress = function(req, res) {
+  var address = req.params.address;
+  var addressFind = Account.findOne({ 'address' : address }).lean(true);
+
+  addressFind.exec(function (err, address) {
+    if (err || !address) {
+      console.error("can't find address " + address)
+      res.status(404).send();
+    } else {
+      res.write(JSON.stringify({'address': address.address, 'balance': address.balance}));
+      res.end();
     }
   });
 };
