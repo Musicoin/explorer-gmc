@@ -248,6 +248,18 @@ exports.data = function(req, res){
           });
         }
       });
+    } else if (req.body.action == 'lastblock') {
+      web3.eth.getBlock('latest', function(err, latest) {
+      if (err || !latest) {
+        console.error("web3relay.lastblock error: " + err);
+        res.write(JSON.stringify({"error": true}));
+        res.end();
+      } else {
+        res.write(JSON.stringify({"number": latest.number}));
+        res.end();
+      }
+      });
+
     } else {
       console.error("Invalid Request: " + action)
       res.status(400).send();

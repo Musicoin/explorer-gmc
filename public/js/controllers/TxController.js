@@ -25,6 +25,13 @@ angular.module('BlocksApp').controller('TxController', function($stateParams, $r
         return;
       }
       $scope.tx = data;
+      $http({
+        method: 'POST',
+        url: '/web3relay',
+        data: {"action": "lastblock"}
+      }).success(function(lastblock) {
+        $scope.tx['confirmations'] = lastblock.number - data.blockNumber
+      })
       if (data.timestamp)
         $scope.tx.datetime = new Date(data.timestamp*1000); 
       if (data.isTrace) // Get internal txs
