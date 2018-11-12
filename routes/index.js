@@ -306,8 +306,7 @@ var getTx = function(req, res){
   txFind.exec(function (err, doc) {
     if (!doc) {
       console.log("missing: " + tx)
-      res.write(JSON.stringify({}));
-      res.end();
+      res.status(404).send();
     } else {
       var block = Block.findOne({}, 'number').lean(true).sort('-number')
       block.exec(function (err, blockDoc) {
