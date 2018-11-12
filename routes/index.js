@@ -301,21 +301,25 @@ var getTotalSupply = function(req, res) {
 
 var getTx = function(req, res){
   var tx = req.body.tx.toLowerCase();
-  var txFind = Block.findOne( { "transactions.hash" : tx }, "transactions timestamp")
-                  .lean(true);
+  var txFind = Transaction.findOne({ "hash" : tx }).lean(true);
+
   txFind.exec(function (err, doc) {
-    if (!doc){
-      console.log("missing: " +tx)
+    if (!doc) {
+      console.log("missing: " + tx)
       res.write(JSON.stringify({}));
       res.end();
     } else {
-      // filter transactions
-      var txDocs = filters.filterBlock(doc, "hash", tx)
-      res.write(JSON.stringify(txDocs));
-      res.end();
+      var block = Block.findOne({}, 'number').lean(true).sort('-number')
+      block.exec(function (err, blockDoc) {
+        console.log(blockDoc.number);
+        doc.confirmations = blockDoc.number - doc.blockNumber
+        res.write(JSON.stringify(doc))
+        res.end();
+      });
     }
   });
 };
+
 /*
   Fetch data from DB
 */
