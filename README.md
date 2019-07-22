@@ -1,11 +1,11 @@
-# GENOM Explorer 
+# MUSIC Explorer 
 
 
 ## Local installation
 
 Clone the repo
 
-`git clone https://github.com/genom-project/explorer`
+`git clone https://github.com/MUSIC-project/explorer`
 
 Download [Nodejs and npm](https://docs.npmjs.com/getting-started/installing-node "Nodejs install") if you don't have them
 
@@ -39,9 +39,9 @@ Basic settings:
     "patch":        true,
     "patchBlocks":  100,
     "settings": {
-        "symbol": "GENOM",
-        "name": "Genom",
-        "title": "Genom Block Explorer",
+        "symbol": "MUSIC",
+        "name": "MUSIC",
+        "title": "MUSIC Block Explorer",
         "author": "Gy9vin"
     }
 }
